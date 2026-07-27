@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Menu, X, Send } from 'lucide-react'
 import { useActiveSection } from '../hooks/useActiveSection'
 
@@ -23,6 +23,18 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [mobileOpen])
 
   return (
     <motion.header
@@ -83,7 +95,9 @@ export default function Header() {
 
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden text-text-primary p-2"
+              className="md:hidden text-text-primary p-2 relative z-10"
+              aria-label={mobileOpen ? 'Закрити меню' : 'Відкрити меню'}
+              type="button"
             >
               {mobileOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -91,43 +105,41 @@ export default function Header() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-bg-primary/95 backdrop-blur-xl border-b border-border overflow-hidden"
-          >
-            <div className="px-6 py-4 flex flex-col gap-2">
-              {navItems.map((item) => {
-                const isActive = activeSection === item.href.replace('#', '')
-                return (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileOpen(false)}
-                    className={`text-base font-medium transition-colors py-2.5 px-3 rounded-lg ${
-                      isActive ? 'text-accent bg-accent/10' : 'text-text-secondary hover:text-accent'
-                    }`}
-                  >
-                    {item.label}
-                  </a>
-                )
-              })}
+      {/* Mobile menu using CSS transition for reliable auto-height on all browsers */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          mobileOpen
+            ? 'max-h-[500px] opacity-100 border-b border-border'
+            : 'max-h-0 opacity-0'
+        } bg-bg-primary/95 backdrop-blur-xl`}
+      >
+        <div className="px-6 py-4 flex flex-col gap-2">
+          {navItems.map((item) => {
+            const isActive = activeSection === item.href.replace('#', '')
+            return (
               <a
-                href={TELEGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 bg-accent text-bg-primary px-5 py-3 rounded-full font-semibold text-sm mt-2"
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className={`text-base font-medium transition-colors py-2.5 px-3 rounded-lg ${
+                  isActive ? 'text-accent bg-accent/10' : 'text-text-secondary hover:text-accent'
+                }`}
               >
-                <Send size={16} />
-                Написати в Telegram
+                {item.label}
               </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            )
+          })}
+          <a
+            href={TELEGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 bg-accent text-bg-primary px-5 py-3 rounded-full font-semibold text-sm mt-2"
+          >
+            <Send size={16} />
+            Написати в Telegram
+          </a>
+        </div>
+      </div>
     </motion.header>
   )
 }
