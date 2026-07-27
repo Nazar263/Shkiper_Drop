@@ -5,7 +5,7 @@ const TELEGRAM_URL = 'https://t.me/ShkiperDrop'
 export default function Footer() {
   return (
     <footer className="bg-bg-primary border-t border-border relative overflow-hidden">
-      <div className="absolute inset-0 animated-gradient-bg opacity-10 pointer-events-none"></div>
+      <div className="absolute inset-0 animated-gradient-bg opacity-10 pointer-events-none hidden md:block"></div>
       <div className="mx-auto max-w-[1280px] px-6 md:px-8 py-12 md:py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           <div>

@@ -14,7 +14,7 @@ export default function CatalogSection() {
 
   return (
     <section id="catalog" className="scroll-mt-20 py-28 md:py-36 bg-bg-primary section-divider relative overflow-hidden">
-      <div className="absolute inset-0 animated-gradient-bg opacity-10 pointer-events-none"></div>
+      <div className="absolute inset-0 animated-gradient-bg opacity-10 pointer-events-none hidden md:block"></div>
       
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
