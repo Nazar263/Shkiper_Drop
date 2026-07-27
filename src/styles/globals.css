@@ -1,0 +1,518 @@
+@import "tailwindcss";
+
+@theme {
+  --spacing: 0.25rem;
+
+  --color-bg-primary: #0A0A0A;
+  --color-bg-secondary: #1A1A1A;
+  --color-bg-card: rgba(255, 255, 255, 0.05);
+  --color-accent: #C6FF3D;
+  --color-accent-blue: #2E6BFF;
+  --color-text-primary: #F5F5F5;
+  --color-text-secondary: #A0A0A0;
+  --color-border: rgba(255, 255, 255, 0.1);
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-section: 96px;
+  --space-section-lg: 128px;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(198, 255, 61, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(198, 255, 61, 0.5);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glow-accent {
+  box-shadow: 0 0 20px rgba(198, 255, 61, 0.15), 0 0 60px rgba(198, 255, 61, 0.05);
+}
+
+.glow-text {
+  text-shadow: 0 0 20px rgba(198, 255, 61, 0.3), 0 0 40px rgba(198, 255, 61, 0.1);
+}
+
+.section-divider {
+  border-bottom: none;
+  position: relative;
+}
+
+.section-divider::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(198, 255, 61, 0.15) 30%,
+    rgba(46, 107, 255, 0.1) 50%,
+    rgba(198, 255, 61, 0.15) 70%,
+    transparent 100%
+  );
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(198, 255, 61, 0.2), 0 0 60px rgba(198, 255, 61, 0.05);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(198, 255, 61, 0.35), 0 0 80px rgba(198, 255, 61, 0.1);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes light-sweep {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.light-sweep {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(198, 255, 61, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: light-sweep 3s ease-in-out infinite;
+}
+
+/* ========== WOW HOVER EFFECTS ========== */
+
+/* Product Card: 3D tilt + glow border + shimmer */
+.wow-card {
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+              border-color 0.4s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+  position: relative;
+  overflow: hidden;
+}
+
+.wow-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(198, 255, 61, 0.06),
+    transparent
+  );
+  transition: left 0.6s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.wow-card:hover::before {
+  left: 150%;
+}
+
+.wow-card:hover {
+  transform: perspective(800px) translateY(-8px) rotateX(2deg) rotateY(-1deg);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(198, 255, 61, 0.08),
+    inset 0 0 30px rgba(198, 255, 61, 0.02);
+  border-color: rgba(198, 255, 61, 0.2);
+}
+
+/* Product image zoom */
+.wow-img {
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+              filter 0.5s ease;
+}
+
+.wow-card:hover .wow-img {
+  transform: scale(1.08);
+  filter: brightness(1.1) saturate(1.1);
+}
+
+/* Advantage Card: glow ring + lift */
+.wow-advantage {
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.4s ease,
+              border-color 0.4s ease;
+}
+
+.wow-advantage:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(198, 255, 61, 0.06);
+  border-color: rgba(198, 255, 61, 0.15);
+}
+
+.wow-advantage:hover .wow-icon {
+  transform: scale(1.15) rotate(-5deg);
+  box-shadow: 0 0 20px rgba(198, 255, 61, 0.2);
+}
+
+.wow-icon {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.4s ease;
+}
+
+/* Review Card: glow pop */
+.wow-review {
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.4s ease,
+              border-color 0.3s ease;
+}
+
+.wow-review:hover {
+  transform: scale(1.03) translateY(-4px);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.4),
+    0 0 24px rgba(198, 255, 61, 0.08);
+  border-color: rgba(198, 255, 61, 0.2);
+}
+
+/* CTA Button: intense glow + scale */
+.wow-btn {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+}
+
+.wow-btn:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow:
+    0 8px 24px rgba(198, 255, 61, 0.3),
+    0 0 60px rgba(198, 255, 61, 0.15);
+}
+
+.wow-btn:active {
+  transform: scale(0.98);
+}
+
+/* Ghost Button (outline): glow fill */
+.wow-btn-ghost {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.wow-btn-ghost::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(198, 255, 61, 0.1);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  z-index: -1;
+  border-radius: inherit;
+}
+
+.wow-btn-ghost:hover::before {
+  transform: scaleX(1);
+}
+
+.wow-btn-ghost:hover {
+  border-color: rgba(198, 255, 61, 0.5);
+  color: #C6FF3D;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(198, 255, 61, 0.1);
+}
+
+/* Nav Link: animated underline */
+.wow-link {
+  position: relative;
+}
+
+.wow-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: #C6FF3D;
+  box-shadow: 0 0 8px rgba(198, 255, 61, 0.4);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.wow-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* FAQ Item: glow expand */
+.wow-faq {
+  transition: background-color 0.3s ease;
+}
+
+.wow-faq:hover {
+  background-color: rgba(198, 255, 61, 0.02);
+}
+
+/* Tab Button: glow active */
+.wow-tab {
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.wow-tab:hover:not(.wow-tab-active) {
+  transform: translateY(-2px);
+  border-color: rgba(198, 255, 61, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.wow-tab-active {
+  box-shadow:
+    0 4px 20px rgba(198, 255, 61, 0.2),
+    0 0 40px rgba(198, 255, 61, 0.05);
+}
+
+/* Badge pulse */
+.wow-badge {
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(198, 255, 61, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(198, 255, 61, 0); }
+}
+
+/* Floating button bounce-in */
+.wow-float {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease;
+}
+
+.wow-float:hover {
+  transform: scale(1.15) rotate(-8deg);
+  box-shadow:
+    0 8px 24px rgba(198, 255, 61, 0.4),
+    0 0 60px rgba(198, 255, 61, 0.15);
+}
+
+/* Delivery card: slide glow */
+.wow-delivery {
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 0.4s ease,
+              border-color 0.4s ease;
+}
+
+.wow-delivery:hover {
+  transform: translateY(-4px) translateX(4px);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.3),
+    0 0 24px rgba(198, 255, 61, 0.06),
+    -4px 0 16px rgba(198, 255, 61, 0.04);
+  border-color: rgba(198, 255, 61, 0.15);
+}
+
+/* ========== HERO BACKGROUND ========== */
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ========== ANIMATED GRADIENT BACKGROUND ========== */
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 0%, 100% 0%, 50% 50%, 0% 100%, 100% 100%;
+  }
+  20% {
+    background-position: 100% 0%, 100% 100%, 0% 50%, 100% 0%, 0% 100%;
+  }
+  40% {
+    background-position: 100% 100%, 0% 100%, 0% 0%, 0% 100%, 100% 0%;
+  }
+  60% {
+    background-position: 0% 100%, 0% 0%, 100% 50%, 100% 100%, 0% 100%;
+  }
+  80% {
+    background-position: 0% 0%, 100% 50%, 50% 100%, 0% 0%, 100% 0%;
+  }
+  100% {
+    background-position: 0% 0%, 100% 0%, 50% 50%, 0% 100%, 100% 100%;
+  }
+}
+
+@keyframes gradient-pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animated-gradient-bg {
+  background:
+    radial-gradient(ellipse 120% 100% at 10% 0%, rgba(198,255,61,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 80% at 90% 10%, rgba(46,107,255,0.06) 0%, transparent 45%),
+    radial-gradient(ellipse 80% 60% at 30% 90%, rgba(198,255,61,0.05) 0%, transparent 40%),
+    radial-gradient(ellipse 90% 70% at 70% 80%, rgba(46,107,255,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(198,255,61,0.03) 0%, transparent 45%),
+    radial-gradient(ellipse 70% 60% at 80% 30%, rgba(46,107,255,0.04) 0%, transparent 40%);
+  background-size: 300% 300%, 250% 250%, 280% 280%, 260% 260%, 240% 240%, 220% 220%;
+  animation: gradient-shift 20s ease-in-out infinite, gradient-pulse 8s ease-in-out infinite;
+}
+
+/* Noise texture overlay for premium depth */
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* Vignette — darkened edges */
+.vignette {
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, rgba(0,0,0,0.5) 100%);
+}
+
+@media (max-width: 768px) {
+  .animated-gradient-bg {
+    background:
+      radial-gradient(ellipse 120% 100% at 10% 0%, rgba(198,255,61,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 80% at 90% 10%, rgba(46,107,255,0.05) 0%, transparent 45%),
+      radial-gradient(ellipse 80% 60% at 30% 90%, rgba(198,255,61,0.04) 0%, transparent 40%),
+      radial-gradient(ellipse 90% 70% at 70% 80%, rgba(46,107,255,0.05) 0%, transparent 50%);
+    background-size: 250% 250%, 220% 220%, 240% 240%, 230% 230%;
+    animation: none;
+  }
+}
+
+/* ========== FLOATING ANIMATIONS ========== */
+
+@keyframes float1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-25px, 15px) scale(1.08); }
+  66% { transform: translate(15px, -25px) scale(0.92); }
+}
+
+@keyframes float3 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -15px); }
+}
+
+@keyframes float4 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(40px, -30px) scale(1.1); }
+  50% { transform: translate(-20px, 40px) scale(0.9); }
+  75% { transform: translate(-40px, -20px) scale(1.05); }
+}
+
+@keyframes float5 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-30px, 25px) rotate(120deg); }
+  66% { transform: translate(35px, -35px) rotate(240deg); }
+}
+
+@keyframes float6 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+  33% { transform: translate(45px, 10px) scale(1.15); opacity: 0.6; }
+  66% { transform: translate(-25px, -40px) scale(0.85); opacity: 0.4; }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.5); }
+}
+
+/* Desktop-only floating elements wrapper */
+@media (min-width: 769px) {
+  .desktop-floating {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .desktop-floating {
+    display: none !important;
+  }
+}
+
+/* ========== MOBILE: STATIC BACKGROUND ========== */
+
+@media (max-width: 768px) {
+  .hero-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .wow-card:hover {
+    transform: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .wow-card::before {
+    display: none;
+  }
+
+  .wow-advantage:hover {
+    transform: translateY(-3px);
+  }
+
+  .wow-review:hover {
+    transform: scale(1.01);
+  }
+}
